@@ -11,13 +11,16 @@
       var $video_wrap = $('<div></div>').addClass('video-player').addClass(options.theme);
 
       var $video_controls = $('<div></div>').addClass('video-player-controls');
-      var $video_btn_play = $video_controls.append('<a title="Play/Pause"></a>').addClass('video-player-btn-play');
-      var $video_seek = $video_controls.append('<div></div>').addClass('video-player-seek');
-      var $video_timer = $video_controls.append('<div></div>').addClass('video-player-timer');
-      var $video_volume_box = $video_controls.append('<div></div>').addClass('video-player-volume-box');
 
-      var $volume_slider = $video_volume_box.append('<div></div>').addClass('video-volume-box-slider');
-      var $volume_btn = $video_volume_box.append('<div></div>').addClass('video-volume-box-btn');
+      var $video_btn_play = $('<a title="Play/Pause"></a>').addClass('video-player-btn-play');
+      var $video_seek = $('<div>o</div>').addClass('video-player-seek');
+      var $video_timer = $('<div>timer</div>').addClass('video-player-timer');
+      var $video_volume_box = $('<div></div>').addClass('video-player-volume-box');
+      var $volume_slider = $('<div></div>').addClass('video-volume-box-slider');
+      var $volume_btn = $('<div></div>').addClass('video-volume-box-btn');
+
+      $video_volume_box.append($volume_slider).append($volume_btn);
+      $video_controls.append($video_btn_play).append($video_seek).append($video_timer).append($video_volume_box);
 
       $video.wrap($video_wrap);
       $video.after($video_controls);
@@ -35,6 +38,7 @@
       };
 
       $video_btn_play.click(videoPlay);
+
       $video.bind('play',function() {
         $video_btn_play.addClass('video-btn-pause');
       });
@@ -64,4 +68,3 @@
     });
   }
 })(jQuery);
-
