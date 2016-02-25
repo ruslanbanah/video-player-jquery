@@ -1,0 +1,159 @@
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+// -------------------
+
+
+@js-video-width:                    650px;
+@js-video-view-height:              310px;
+@js-video-control-height:           40px;
+@js-video-control-share-item-width: 44px;
+@js-video-control-bg-color:         #f6f6f6;
+@js-video-control-bg-btn-hover:     #d8d9d9;
+@js-video-control-icon-color:       #4f4f4f;
+
+@js-video-control-line-color:       #4f4f4f;
+@js-video-control-line-active-color:#898989;
+
+.js-video{
+  width: @js-video-width;
+
+  &-view{
+    height: @js-video-view-height;
+    background: #000;
+
+    video{
+      width: 100%;
+      height: 100%;
+    }
+  }
+  .__sep-line{
+    position: relative;
+    height: 100%;
+
+    &:after{
+      content: ' ';
+      position: absolute;
+      right: 0;
+      top: 0;
+      border-left: 1px solid #fff;
+      border-right: 1px solid #d8d9d9;
+      width: 2px;
+      height: 100%;
+    }
+  }
+  .line{
+    height: 6px;
+    width: 100%;
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    box-shadow: 1px 0 3px #232323 inset;
+    background: @js-video-control-line-color;
+
+    &-active{
+      height: 6px;
+      box-shadow: 1px 0 3px #3c3d3d inset;
+      background: @js-video-control-line-active-color;
+    }
+  }
+  &-control{
+    height: @js-video-control-height;
+    background: @js-video-control-bg-color;
+
+      &-play{
+        float: left;
+        color: @js-video-control-icon-color;
+        font-size: 12px;
+        padding: 12px 0;
+        min-width: 46px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        &:hover{
+          background: @js-video-control-bg-btn-hover;
+        }
+      }
+      &-time{
+        float: left;
+        font-size: 11px;
+        text-shadow: 0 1px 0  #fff;
+        padding: 12px 18px;
+        overflow: hidden;
+        width: 63px;
+      }
+      &-timeline{
+        float: left;
+        min-width: 345px;
+        padding: 15px 18px;
+      }
+      &-volume{
+        float: left;
+        color: @js-video-control-icon-color;
+        font-size: 12px;
+        padding: 15px 18px 15px 28px;
+        i{
+          position: absolute;
+          margin-left: -18px;
+          top: 12px;
+          cursor: pointer;
+        }
+        .line{
+          min-width: 55px;
+        }
+      }
+      &-share{
+        float: left;
+        min-width: @js-video-control-share-item-width;
+        padding: 0 18px;
+
+        ul{
+          margin: 0;
+          padding: 0;
+        }
+        li{
+          text-align: center;
+          list-style: none;
+          background: @js-video-control-bg-color;
+          min-width: @js-video-control-share-item-width;
+          height: @js-video-control-height;
+          padding: 10px 15px;
+          position: absolute;
+          color: @js-video-control-icon-color;
+          top: 0;
+          left: 0;
+          cursor: pointer;
+          transition: all 0.3s ease;
+
+
+          &:hover{
+            background: #d4d4d4;
+          }
+        }
+
+        ul:hover{
+          li + li{
+            top: -40px;
+          }
+          li + li + li{
+            top: -80px;
+          }
+        }
+      }
+
+      &-fullscreen{
+        float: left;
+        padding: 10px 18px;
+        height: @js-video-control-height;
+        color: @js-video-control-icon-color;
+
+        &:hover{
+          background: @js-video-control-bg-btn-hover;
+        }
+      }
+  }
+}
