@@ -33,7 +33,7 @@ Player.prototype.toggleMute = function() {
 /**
  * Go to current time.
  * @function setCurrentTime
- * @param currentTime
+ * @param currentTime Time ms
  */
 Player.prototype.setCurrentTime = function(currentTime) {
   this.player.currentTime = currentTime;
@@ -41,7 +41,7 @@ Player.prototype.setCurrentTime = function(currentTime) {
 /**
  * Set volume.
  * @function setVolume
- * @param volume
+ * @param volume Number 0-1
  */
 Player.prototype.setVolume = function(volume) {
   this.player.volume = volume;
@@ -138,15 +138,15 @@ Player.prototype.ready = function() {
 /**
  * Add event listener.
  * @function addEventListener
- * @param event
- * @param callBack
+ * @param event Event name
+ * @param callBack Callback function
  */
 Player.prototype.addEventListener = function(event, callBack) {
   this.player.addEventListener(event, callBack);
 };
 /**
  * Init player`s event.
- * @function
+ * @function eventInit
  */
 Player.prototype.eventInit = function() {
   var self = this;
@@ -207,7 +207,25 @@ Player.prototype.eventInit = function() {
 };
 /**
  * Init player.
+ * @function init
  * @param options
+ * @example
+ * {
+ *  theme: theme-player-dark,
+ *  templateWrapper: $(...), //Template wrapper player
+ *  templateControls: $(...), //Template tollbar
+ *  controlPanel: {
+ *              btnPlay: $(...) //Button PLay
+ *              timerPanel: $(...) //Timer`s panel
+ *              progressBar: $(...) //Wrapper time line
+ *              progressBarActive: $(...) //Indicator time line
+ *              btnMute: $(...) //Button toggle mute
+ *              volumeProgerssBar: $(...) //Wrapper volume slider
+ *              volumeProgerssBarActive: $(...) //Indicator volume
+ *              btnFullScreen: $(...) //Button fullscreen
+ *              btnSocial: $(...) //Button social
+ *              }
+ * }
  */
 Player.prototype.init = function(options) {
   var self = this;
@@ -249,6 +267,7 @@ Player.prototype.init = function(options) {
     .append(defaultOptions.controlPanel.volumePanel)
     .append(defaultOptions.controlPanel.btnSocial)
     .append(defaultOptions.controlPanel.btnFullScreen);
+
   self.options = $.extend(defaultOptions, options);
   self.setTemplateWrapper();
   self.setTemplateControls();
