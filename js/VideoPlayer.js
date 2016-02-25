@@ -47,10 +47,7 @@ Player.prototype.setFullscreenData = function(state) {
   this.player.setAttribute('data-fullscreen', !!state);
 }
 Player.prototype.fullScreen = function() {
-  var isFullScreen = function() {
-    return !!(document.fullScreen || document.webkitIsFullScreen || document.mozFullScreen || document.msFullscreenElement || document.fullscreenElement);
-  }
-  if (isFullScreen()) {
+  if (!!(document.fullScreen || document.webkitIsFullScreen || document.mozFullScreen || document.msFullscreenElement || document.fullscreenElement)) {
     if (document.exitFullscreen) document.exitFullscreen();
     else if (document.mozCancelFullScreen) document.mozCancelFullScreen();
     else if (document.webkitCancelFullScreen) document.webkitCancelFullScreen();
@@ -64,7 +61,7 @@ Player.prototype.fullScreen = function() {
     else if (this.player.msRequestFullscreen) this.player.msRequestFullscreen();
     this.setFullscreenData(true);
   }
-}
+};
 Player.prototype.ready = function() {
   var self = this;
   return new Promise(function(resolve, reject) {
@@ -110,8 +107,8 @@ Player.prototype.eventInit = function() {
   this.options.controlPanel.progressBar.bind('click', function(e) {
     var width = e.currentTarget.clientWidth;
     var duration = self.player.duration;
-    var time = (e.offsetX * duration) / width;
-    self.player.currentTime = time;
+
+    self.player.currentTime = (e.offsetX * duration) / width;
   });
   //Fullscreen
   this.options.controlPanel.btnFullScreen.bind('click', function() {
@@ -120,7 +117,7 @@ Player.prototype.eventInit = function() {
   //Volume
   this.options.controlPanel.btnMute.bind('click', function() {
     self.mute();
-  })
+  });
   this.options.controlPanel.volumeProgerssBar.bind('click', function(e) {
     var width = e.currentTarget.clientWidth;
     self.player.volume = e.offsetX / width;
