@@ -15,7 +15,9 @@ Player.prototype.pause = function() {
   this.player.pause();
 };
 Player.prototype.mute = function() {
-  this.player.mute();
+  console.log([this.player]);
+  this.player.muted = !this.player.muted;
+  this.options.controlPanel.btnMute.toggleClass('fa-volume-up',!this.player.muted).toggleClass('fa-volume-off',this.player.muted);
 };
 Player.prototype.setCurrentTime = function(currentTime) {
   this.player.currentTime = currentTime;
@@ -32,6 +34,28 @@ Player.prototype.setTemplateWrapper = function(){
 Player.prototype.setTemplateVideoWrapper = function(){
   $(this.player).wrap(this.options.templateVideoWrapper);
 };
+Player.prototype.setFullscreenData = function(state){
+  this.player.setAttribute('data-fullscreen', !!state);
+}
+Player.prototype.fullScreen = function() {
+  var isFullScreen = function() {
+   return !!(document.fullScreen || document.webkitIsFullScreen || document.mozFullScreen || document.msFullscreenElement || document.fullscreenElement);
+  }
+  if (isFullScreen()) {
+   if (document.exitFullscreen) document.exitFullscreen();
+   else if (document.mozCancelFullScreen) document.mozCancelFullScreen();
+   else if (document.webkitCancelFullScreen) document.webkitCancelFullScreen();
+   else if (document.msExitFullscreen) document.msExitFullscreen();
+   this.setFullscreenData(false);
+  }
+  else {
+     if (this.player.requestFullscreen) this.player.requestFullscreen();
+     else if (this.player.mozRequestFullScreen) this.player.mozRequestFullScreen();
+     else if (this.player.webkitRequestFullScreen) this.player.webkitRequestFullScreen();
+     else if (this.player.msRequestFullscreen) this.player.msRequestFullscreen();
+     this.setFullscreenData(true);
+  }
+}
 Player.prototype.ready = function() {
     var self = this;
     return new Promise(function(resolve, reject){
@@ -51,6 +75,7 @@ Player.prototype.ready = function() {
 };
 Player.prototype.eventInit = function(){
   var self = this;
+  //Play/stop
   this.options.controlPanel.btnPlay.bind('click',function(){
     if(self.player.paused){
       self.play();
@@ -58,12 +83,29 @@ Player.prototype.eventInit = function(){
       self.pause();
     }
   });
+  //Time line
   this.options.controlPanel.progressBar.bind('click', function(e){
     var width = e.currentTarget.clientWidth;
     var duration = self.player.duration;
     var time = (e.offsetX * duration) / width;
     self.player.currentTime = time;
   });
+  //Fullscreen
+  this.options.controlPanel.btnFullScreen.bind('click', function(){
+    self.fullScreen();
+  });
+  //Volume
+  this.options.controlPanel.btnMute.bind('click', function(){
+    self.mute();
+  })
+  this.options.controlPanel.volumeProgerssBar.bind('click', function(e){
+    var width = e.currentTarget.clientWidth;
+    self.player.volume = e.offsetX / width;
+  });
+  this.player.onvolumechange = function() {
+    var volume = self.player.volume;
+    self.options.controlPanel.volumeProgerssBarActive.css({ width: (volume*100)+'%'});
+  };
   this.player.ontimeupdate = function(){
     var seconds = self.player.currentTime;
     var m = Math.floor(seconds/60)<10 ? "0"+Math.floor(seconds/60) : Math.floor(seconds/60);
