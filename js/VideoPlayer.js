@@ -39,7 +39,7 @@ Player.prototype.ready = function() {
       if (self.player.readyState === 4) {
         resolve(arguments);
       } else {
-        if(count<5){
+        if(count<20){
           setTimeout(function() { check(count++); }, 100);
         }else{
           reject('Error: Player not ready.');
@@ -57,6 +57,12 @@ Player.prototype.eventInit = function(){
     }else{
       self.pause();
     }
+  });
+  this.options.controlPanel.progressBar.bind('click', function(e){
+    var width = e.currentTarget.clientWidth;
+    var duration = self.player.duration;
+    var time = (e.offsetX * duration) / width;
+    self.player.currentTime = time;
   });
   this.player.ontimeupdate = function(){
     var seconds = self.player.currentTime;
