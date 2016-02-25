@@ -23,10 +23,10 @@ Player.prototype.pause = function() {
   this.player.pause();
 };
 /**
- * Volume off.
- * @function mute
+ * Volume on\off.
+ * @function toggleMute
  */
-Player.prototype.mute = function() {
+Player.prototype.toggleMute = function() {
   this.player.muted = !this.player.muted;
   this.options.controlPanel.btnMute.toggleClass('fa-volume-up', !this.player.muted).toggleClass('fa-volume-off', this.player.muted);
 };
@@ -49,7 +49,7 @@ Player.prototype.setVolume = function(volume) {
 /**
  * Get duration video.
  * @function getDuration
- * @returns {exports.duration|*|duration|.meta.duration|Number|.exports.duration}
+ * @returns {Number}
  */
 Player.prototype.getDuration = function() {
   return this.player.duration;
@@ -57,7 +57,7 @@ Player.prototype.getDuration = function() {
 /**
  * Returns the current time video.
  * @function getCurrentTime
- * @returns {Number|*}
+ * @returns {Number}
  */
 Player.prototype.getCurrentTime = function() {
   return this.player.currentTime;
@@ -179,7 +179,7 @@ Player.prototype.eventInit = function() {
   });
   //Volume
   this.options.controlPanel.btnMute.bind('click', function() {
-    self.mute();
+    self.toggleMute();
   });
   this.options.controlPanel.volumeProgerssBar.bind('click', function(e) {
     var width = e.currentTarget.clientWidth;
