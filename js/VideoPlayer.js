@@ -17,7 +17,7 @@ Player.prototype.play = function() {
 };
 /**
  * Stop video.
- * $function pause
+ * @function pause
  */
 Player.prototype.pause = function() {
   this.player.pause();
