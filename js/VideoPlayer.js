@@ -15,7 +15,6 @@ Player.prototype.pause = function() {
   this.player.pause();
 };
 Player.prototype.mute = function() {
-  console.log([this.player]);
   this.player.muted = !this.player.muted;
   this.options.controlPanel.btnMute.toggleClass('fa-volume-up',!this.player.muted).toggleClass('fa-volume-off',this.player.muted);
 };
