@@ -8,60 +8,114 @@ var Player = function(el, options) {
     self.eventInit();
   });
 };
-
+/**
+ * Start playing video.
+ * @function play
+ */
 Player.prototype.play = function() {
   this.player.play();
 };
+/**
+ * Stop video.
+ * $function pause
+ */
 Player.prototype.pause = function() {
   this.player.pause();
 };
+/**
+ * Volume off.
+ * @function mute
+ */
 Player.prototype.mute = function() {
   this.player.muted = !this.player.muted;
   this.options.controlPanel.btnMute.toggleClass('fa-volume-up', !this.player.muted).toggleClass('fa-volume-off', this.player.muted);
 };
+/**
+ * Go to current time.
+ * @function setCurrentTime
+ * @param currentTime
+ */
 Player.prototype.setCurrentTime = function(currentTime) {
   this.player.currentTime = currentTime;
 };
+/**
+ * Set volume.
+ * @function setVolume
+ * @param volume
+ */
 Player.prototype.setVolume = function(volume) {
   this.player.volume = volume;
 };
+/**
+ * Get duration video.
+ * @function getDuration
+ * @returns {exports.duration|*|duration|.meta.duration|Number|.exports.duration}
+ */
 Player.prototype.getDuration = function() {
   return this.player.duration;
 };
+/**
+ * Returns the current time video.
+ * @function getCurrentTime
+ * @returns {Number|*}
+ */
 Player.prototype.getCurrentTime = function() {
   return this.player.currentTime;
 };
+/**
+ * Returns the current percent video.
+ * @function getCurrentPercent
+ * @returns {number}
+ */
 Player.prototype.getCurrentPercent = function() {
   return (this.player.currentTime * 100) / this.player.duration;
 };
+/**
+ * Adds a toolbar.
+ * @function setTemplateControls
+ */
 Player.prototype.setTemplateControls = function() {
   $(this.player).after(this.options.templateControls);
 };
+/**
+ * Wrap for the whole player.
+ * @function setTemplateWrapper
+ */
 Player.prototype.setTemplateWrapper = function() {
   $(this.player).wrap(this.options.templateWrapper);
 };
+/**
+ * Wrap for the tag <video>.
+ * @function setTemplateVideoWrapper
+ */
 Player.prototype.setTemplateVideoWrapper = function() {
   $(this.player).wrap(this.options.templateVideoWrapper);
 };
-Player.prototype.setFullscreenData = function(state) {
-  this.player.setAttribute('data-fullscreen', !!state);
-}
+/**
+ * Enable full screen mode.
+ * @function fullScreen
+ */
 Player.prototype.fullScreen = function() {
   if (!!(document.fullScreen || document.webkitIsFullScreen || document.mozFullScreen || document.msFullscreenElement || document.fullscreenElement)) {
     if (document.exitFullscreen) document.exitFullscreen();
     else if (document.mozCancelFullScreen) document.mozCancelFullScreen();
     else if (document.webkitCancelFullScreen) document.webkitCancelFullScreen();
     else if (document.msExitFullscreen) document.msExitFullscreen();
-    this.setFullscreenData(false);
+    this.player.setAttribute('data-fullscreen', false);
   }
   else {
     if (this.player.requestFullscreen) this.player.requestFullscreen();
     else if (this.player.mozRequestFullScreen) this.player.mozRequestFullScreen();
     else if (this.player.webkitRequestFullScreen) this.player.webkitRequestFullScreen();
     else if (this.player.msRequestFullscreen) this.player.msRequestFullscreen();
-    this.setFullscreenData(true);
+    this.player.setAttribute('data-fullscreen', true);
   }
 };
+/**
+ * There is enough data for the playback to continue at the current playback rate without running out of content.
+ * @function ready
+ * @returns {Promise}
+ */
 Player.prototype.ready = function() {
   var self = this;
   return new Promise(function(resolve, reject) {
@@ -78,13 +132,22 @@ Player.prototype.ready = function() {
         }
       }
     }
-
     check(0);
   })
 };
+/**
+ * Add event listener.
+ * @function addEventListener
+ * @param event
+ * @param callBack
+ */
 Player.prototype.addEventListener = function(event, callBack) {
   this.player.addEventListener(event, callBack);
 };
+/**
+ * Init player`s event.
+ * @function
+ */
 Player.prototype.eventInit = function() {
   var self = this;
   //Format time
@@ -142,7 +205,10 @@ Player.prototype.eventInit = function() {
     btnPlay.find('i').removeClass('fa-pause').addClass('fa-play');
   };
 };
-//Init player
+/**
+ * Init player.
+ * @param options
+ */
 Player.prototype.init = function(options) {
   var self = this;
   var defaultOptions = {
@@ -188,6 +254,7 @@ Player.prototype.init = function(options) {
   self.setTemplateControls();
   self.setTemplateVideoWrapper();
 };
+
 (function($) {
   $.fn.videoPlayer = function(options) {
     return this.map(function() {
