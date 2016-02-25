@@ -74,6 +74,13 @@ Player.prototype.ready = function() {
 };
 Player.prototype.eventInit = function(){
   var self = this;
+  //Format time
+  var formatTime = function(){
+    var seconds = self.player.currentTime;
+    var m = Math.floor(seconds/60)<10 ? "0"+Math.floor(seconds/60) : Math.floor(seconds/60);
+    var s = Math.floor(seconds-(m*60))<10 ? "0"+Math.floor(seconds-(m*60)) : Math.floor(seconds-(m*60))
+    return m+":"+s;
+  }
   //Play/stop
   this.options.controlPanel.btnPlay.bind('click',function(){
     if(self.player.paused){
@@ -107,12 +114,9 @@ Player.prototype.eventInit = function(){
   };
   this.player.ontimeupdate = function(){
     var seconds = self.player.currentTime;
-    var m = Math.floor(seconds/60)<10 ? "0"+Math.floor(seconds/60) : Math.floor(seconds/60);
-    var s = Math.floor(seconds-(m*60))<10 ? "0"+Math.floor(seconds-(m*60)) : Math.floor(seconds-(m*60));
-    var width = self.options.controlPanel.progressBar.width();
     var duration = self.player.duration;
     var percent = (seconds * 100) / duration;
-    self.options.controlPanel.timerPanel.text(m+":"+s);
+    self.options.controlPanel.timerPanel.text(formatTime());
     self.options.controlPanel.progressBarActive.css({ width: percent+'%'});
   };
   this.player.onplay = function() {
@@ -144,6 +148,7 @@ Player.prototype.init = function(options) {
           btnSocial: $('<div>').addClass('js-video-control-share __sep-line').append('<ul><li><i class="fa fa-twitter"></i></li><li><i class="fa fa-facebook"></i></li><li><i class="fa fa-google"></i></li></ul>')
         }
   };
+
   defaultOptions.controlPanel.volumePanel = $('<div>').addClass('js-video-control-volume __sep-line')
                                                       .append(defaultOptions.controlPanel.btnMute)
                                                       .append(defaultOptions.controlPanel.volumeProgerssBar.append(defaultOptions.controlPanel.volumeProgerssBarActive));
@@ -158,16 +163,11 @@ Player.prototype.init = function(options) {
                                                                           .append(defaultOptions.controlPanel.volumePanel)
                                                                           .append(defaultOptions.controlPanel.btnSocial)
                                                                           .append(defaultOptions.controlPanel.btnFullScreen);
-
-
   self.options = $.extend(defaultOptions, options);
-
   self.setTemplateWrapper();
   self.setTemplateControls();
   self.setTemplateVideoWrapper();
 };
-
-
 (function($) {
   $.fn.videoPlayer = function(options){
   return this.each(function() {
