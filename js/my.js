@@ -9,21 +9,20 @@ $(document).ready(function() {
   player.addEventListener('timeUpdateOneSecond', function() {
     var time = player.getCurrentTimeSecond();
     switch(time){
-      case 5: player.pause();
-              if (confirm('Continue?')){
+      case 5:
+        console.log('5 seconds. This is advertising!');
+        player.pause();
+        setTimeout(function(){
                 player.play();
-              }
+              },3000);
           break;
-      case 10: player.pause();
-        if (confirm('Continue?')){
-          player.play();
-        }
-        break;
-      case 15: player.pause();
-        if (confirm('Continue?')){
-          player.play();
-        }
-        break;
+      case 10:
+        console.log('10 seconds. This is advertising!');
+        player.pause();
+        setTimeout(function(){
+                player.play();
+              },3000);
+          break;
     }
   });
 });

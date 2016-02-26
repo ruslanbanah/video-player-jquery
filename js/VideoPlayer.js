@@ -162,13 +162,20 @@ Player.prototype.eventInit = function() {
   var eventUpdateTimeline = new Event('timeUpdateOneSecond');
   var timelineSecond = 0;
   //Format time
-  var formatTime = function() {
-    var seconds = self.player.currentTime;
+  var formatTime = function(seconds) {
     var m = Math.floor(seconds / 60) < 10 ? "0" + Math.floor(seconds / 60) : Math.floor(seconds / 60);
     var s = Math.floor(seconds - (m * 60)) < 10 ? "0" + Math.floor(seconds - (m * 60)) : Math.floor(seconds - (m * 60))
     return m + ":" + s;
   };
-  //Play/stop
+  this.ready().then(function(){
+    var seconds = self.player.currentTime;
+    var duration = self.player.duration;
+    self.options.controlPanel.timerPanel.text(formatTime(seconds)+' / '+formatTime(duration));
+  });
+  //play/stop button in center video
+  $(self.player).parent().bind('click', function(e){ self.play();e.stopPropagation()});
+  $(self.player).bind('click', function(e){ self.pause();e.stopPropagation()});
+  //Play/stop toolbar
   this.options.controlPanel.btnPlay.bind('click', function() {
     if (self.player.paused) {
       self.play();
@@ -203,17 +210,19 @@ Player.prototype.eventInit = function() {
     var seconds = self.player.currentTime;
     var duration = self.player.duration;
     var percent = (seconds * 100) / duration;
-    self.options.controlPanel.timerPanel.text(formatTime());
+    self.options.controlPanel.timerPanel.text(formatTime(seconds)+' / '+formatTime(duration));
     self.options.controlPanel.progressBarActive.css({width: percent + '%'});
   };
-  this.player.onplay = function() {
-    var btnPlay = self.options.controlPanel.btnPlay;
-    btnPlay.find('i').removeClass('fa-play').addClass('fa-pause');
-  };
-  this.player.onpause = function() {
-    var btnPlay = self.options.controlPanel.btnPlay;
-    btnPlay.find('i').removeClass('fa-pause').addClass('fa-play');
-  };
+  this.player.addEventListener('play',function() {
+    var options = self.options;
+    options.controlPanel.btnPlay.find('i').removeClass('fa-play').addClass('fa-pause');
+    $(self.player).parent().removeClass('paused');
+  });
+  this.player.addEventListener('pause', function() {
+    var options = self.options;
+    options.controlPanel.btnPlay.find('i').removeClass('fa-pause').addClass('fa-play');
+    $(self.player).parent().addClass('paused');
+  });
   this.player.addEventListener('timeupdate', function() {
     var timeSeconds = Math.round(self.getCurrentTime());
     if (timeSeconds>timelineSecond) {
@@ -250,7 +259,7 @@ Player.prototype.init = function(options) {
     theme: 'theme-player-dark',
     controlPanel: {
       btnPlay: $('<div><i class="fa fa-play"></i></div>').addClass('js-video-control-play __sep-line'),
-      timerPanel: $('<div>00:00</div>').addClass('js-video-control-time __sep-line'),
+      timerPanel: $('<div>00:00 / 00:00</div>').addClass('js-video-control-time __sep-line'),
 
       progressBar: $('<div>').addClass('line'),
       progressBarActive: $('<div>').addClass('line-active'),
@@ -273,7 +282,8 @@ Player.prototype.init = function(options) {
   defaultOptions.controlPanel.timeLinePanel = $('<div>')
     .addClass('js-video-control-timeline __sep-line')
     .append(defaultOptions.controlPanel.progressBar.append(defaultOptions.controlPanel.progressBarActive));
-  defaultOptions.templateVideoWrapper = $('<div>').addClass('js-video-view');
+  defaultOptions.templateVideoWrapper = $('<div></div>');
+  defaultOptions.templateVideoWrapper.addClass('js-video-view').addClass('paused');
   defaultOptions.templateWrapper = $('<div></div>').addClass('js-video');
 
   defaultOptions.templateControls = $('<div>')
