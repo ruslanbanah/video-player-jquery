@@ -63,6 +63,14 @@ Player.prototype.getCurrentTime = function() {
   return this.player.currentTime;
 };
 /**
+ * Returns the current time video second.
+ * @function getCurrentTimeSecond
+ * @returns {Number}
+ */
+Player.prototype.getCurrentTimeSecond = function() {
+  return Math.round(this.player.currentTime);
+};
+/**
  * Returns the current percent video.
  * @function getCurrentPercent
  * @returns {number}
@@ -132,6 +140,7 @@ Player.prototype.ready = function() {
         }
       }
     }
+
     check(0);
   })
 };
@@ -150,6 +159,8 @@ Player.prototype.addEventListener = function(event, callBack) {
  */
 Player.prototype.eventInit = function() {
   var self = this;
+  var eventUpdateTimeline = new Event('timeUpdateOneSecond');
+  var timelineSecond = 0;
   //Format time
   var formatTime = function() {
     var seconds = self.player.currentTime;
@@ -157,7 +168,6 @@ Player.prototype.eventInit = function() {
     var s = Math.floor(seconds - (m * 60)) < 10 ? "0" + Math.floor(seconds - (m * 60)) : Math.floor(seconds - (m * 60))
     return m + ":" + s;
   };
-  console.log([this.player]);
   //Play/stop
   this.options.controlPanel.btnPlay.bind('click', function() {
     if (self.player.paused) {
@@ -204,6 +214,13 @@ Player.prototype.eventInit = function() {
     var btnPlay = self.options.controlPanel.btnPlay;
     btnPlay.find('i').removeClass('fa-pause').addClass('fa-play');
   };
+  this.player.addEventListener('timeupdate', function() {
+    var timeSeconds = Math.round(self.getCurrentTime());
+    if (timeSeconds>timelineSecond) {
+      timelineSecond = timeSeconds;
+      this.dispatchEvent(eventUpdateTimeline);
+    }
+  });
 };
 /**
  * Init player.
