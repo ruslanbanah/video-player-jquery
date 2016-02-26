@@ -5,6 +5,7 @@ $(document).ready(function() {
   var player = $('#m1').videoPlayer();
   player = player[0];
 
+  //For example
   player.addEventListener('timeUpdateOneSecond', function() {
     var time = player.getCurrentTimeSecond();
     switch(time){
